@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CONOCIENDO LA EXPERIENCIA DEL ESTUDIANTE </title>
+<style>
+:root{--black:#252525;--accent:#f9bd2d;--bg:#f6f6f6;--text:#111;--line:#ddd;--blue:#edf3fb;--link:#1468a0;--icon:#333;--muted:#666}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text);font-size:20px;line-height:1.34}
+body{min-width:0}
+a{color:inherit}
+.topbar{height:53px;background:var(--black);border-bottom:1px solid #444;color:#fff;display:flex;align-items:center;position:sticky;top:0;z-index:50}
+.topbar:before{content:"";display:block;width:1px;height:28px;background:#777;margin:0 18px}
+.course-title{font-size:17px;font-weight:700;letter-spacing:.05px;white-space:nowrap}
+.status{margin-left:auto;margin-right:18px;border:2px solid #0b66ff;color:#0b66ff;background:#fff;border-radius:14px;font-weight:700;font-size:13px;line-height:20px;padding:0 8px}
+.tabs{height:57px;background:var(--black);display:flex;align-items:stretch;padding-left:19px;position:sticky;top:53px;z-index:49}
+.tab{display:flex;align-items:center;color:#fff;text-decoration:none;padding:0 18px;font-size:18px;position:relative}
+.tab.active{font-weight:700}
+.tab.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--accent)}
+.hero{height:261px;background:#f7b92f url('assets/courseBanner.jpeg') center/cover no-repeat;position:relative}
+.hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:56%;background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.95))}
+.heroText{position:absolute;left:38px;bottom:18px;z-index:2;color:#fff}
+.heroText .code{font-weight:700;font-size:20px;margin-bottom:8px}
+.heroText .name{font-size:31px;letter-spacing:.2px}
+.layout{display:grid;grid-template-columns:minmax(760px,1fr) 392px;gap:28px;max-width:1890px;margin:auto;padding:26px 38px 80px}
+.mainHead{display:flex;align-items:center;justify-content:space-between;margin:8px 0 22px}
+.mainHead h1{margin:0;font-size:26px;font-weight:500}
+.search{width:46px;height:46px;position:relative;margin-right:14px}
+.search:before{content:"";position:absolute;width:16px;height:16px;border:3px solid #161616;border-radius:50%;left:11px;top:10px}
+.search:after{content:"";position:absolute;width:14px;height:3px;background:#161616;transform:rotate(45deg);left:27px;top:27px}
+.card{background:#fff;border:1px solid #ddd;border-radius:4px;box-shadow:0 3px 12px rgba(0,0,0,.09);margin-bottom:26px;overflow:hidden}
+.cardHead{min-height:193px;display:grid;grid-template-columns:205px 1fr 58px;align-items:start;padding:30px 0 27px 30px}
+.cardHead .copy{padding:4px 25px 0 8px}
+.thumb{width:188px;height:188px;border-radius:3px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb.contain img{object-fit:contain}
+.title{font-size:23px;font-weight:700;line-height:1.18;margin:0 0 6px}
+.desc{margin:0;font-size:19px;line-height:1.38}
+.items{border-top:1px solid var(--line)}
+.card.collapsed>.items{display:none}
+.chev,.itemChev{display:flex;align-items:center;justify-content:center;cursor:pointer}
+.chev{width:34px;height:34px;align-self:end;justify-self:center}
+.itemChev{width:30px;height:30px;justify-self:end}
+.chev svg,.itemChev svg{width:18px;height:18px;display:block;transition:transform .2s ease}
+.card:not(.collapsed)>.cardHead .chev svg,.card:not(.collapsed)>.miniHeader .chev svg{transform:rotate(180deg)}
+.card.collapsed>.cardHead .chev svg,.card.collapsed>.miniHeader .chev svg{transform:rotate(0deg)}
+.toggle.open .itemChev svg{transform:rotate(180deg)}
+.toggle:not(.open) .itemChev svg{transform:rotate(0deg)}
+.row,.miniHeader,.simpleHeader{display:grid;grid-template-columns:40px 40px 1fr 42px;align-items:center;padding:0 30px}
+.row{min-height:70px}
+.row.tall{min-height:96px}
+.miniHeader,.simpleHeader{min-height:91px}
+.circle{width:21px;height:21px;border:2px solid #838383;border-radius:50%;display:block;justify-self:center}
+.iconWrap{display:flex;align-items:center;justify-content:center;width:30px;height:30px}
+.iconWrap img{width:28px;height:28px;object-fit:contain;display:block}
+.iconWrap.small img{width:26px;height:26px}
+.rowTitle{font-size:22px;font-weight:700;line-height:1.24}
+.rowTitle a{color:#111;text-decoration:underline}
+.rowSub,.archiveNote,.dateLine{font-size:18px;font-weight:400;line-height:1.3;margin-top:3px}
+.selected{background:var(--blue);border-radius:4px;margin:0 18px 0 24px;padding-left:24px}
+.nested{display:none}
+.subrow{min-height:70px;display:grid;grid-template-columns:40px 40px 1fr 32px;align-items:center;padding:0 48px 0 54px}
+.subrow.selected{margin:0 18px 0 42px;padding:0 24px}
+.subrow .rowTitle{font-size:21px}
+.avaBox{background:var(--blue);border-radius:4px;margin:0 18px 8px 36px;padding:15px 24px;display:grid;grid-template-columns:34px 42px 1fr;align-items:center}
+.avaBox .rowTitle{font-size:21px}
+.avaBox .iconWrap img{width:34px;height:34px}
+.dots{font-size:31px;font-weight:700;letter-spacing:2px;color:#333}
+.panel{background:#fff;border:1px solid #ddd;border-radius:4px;overflow:hidden}
+.panelBlock{padding:31px 39px 28px}
+.panelBlock+.panelBlock{border-top:1px solid #ddd}
+.panel h2{font-size:27px;font-weight:500;margin:0 0 17px}
+.empty{background:#f0f0f0;text-align:center;font-style:italic;padding:20px 10px;font-size:18px}
+.action{display:grid;grid-template-columns:31px 1fr;margin:14px 0 20px}
+.action .aico{font-size:24px}
+.action b{font-size:19px}
+.action a{display:block;color:#777;opacity:.55;font-size:18px;line-height:1.35;text-decoration:none;margin-top:5px;pointer-events:none;cursor:default}
+.help{position:fixed;right:20px;bottom:22px;width:32px;height:32px;border:2px solid #222;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:24px;z-index:60}
+@media(max-width:1120px){body{min-width:0}.layout{display:block;padding:20px}.panel{display:none}.hero{height:190px}.tabs{overflow:auto}.tab{font-size:16px}.cardHead{grid-template-columns:150px 1fr 42px;min-height:150px;padding-left:20px}.thumb{width:130px;height:130px}.title{font-size:20px}.desc,.rowSub,.archiveNote,.dateLine{font-size:16px}.rowTitle{font-size:18px}.row,.miniHeader,.simpleHeader{padding:0 18px}.subrow{padding-left:28px}.heroText .name{font-size:24px}}
+	
+	.tab.disabled{
+  opacity:.25;
+  pointer-events:none;
+  cursor:default;
+  font-weight:400;
+  filter:grayscale(1);
+}
+
+
+/* ===== Popup estilo Blackboard para contenido Rise / SCORM ===== */
+.rise-trigger{cursor:pointer}
+.rise-trigger:hover{background:var(--blue)}
+.riseModal{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);display:none}
+.riseModal.open{display:block}
+.riseSideRail{position:absolute;left:0;top:0;bottom:0;width:42px;background:#242424;border-right:1px solid #101010}
+.riseClose{position:absolute;top:34px;left:13px;width:46px;height:46px;border:0;background:var(--accent);color:#111;font-size:42px;line-height:40px;cursor:pointer;z-index:2}
+.riseClose:after{content:"";position:absolute;left:0;bottom:-26px;border-left:23px solid transparent;border-right:23px solid transparent;border-top:26px solid var(--accent)}
+.risePanel{position:absolute;left:42px;right:0;top:0;bottom:0;background:#fff;display:flex;flex-direction:column}
+.riseTopbar{height:54px;border-bottom:1px solid #d5d5d5;display:grid;grid-template-columns:150px 1fr 300px;align-items:center;background:#fff;color:#111}
+.riseContentBtn{height:45px;margin-left:18px;border:0;background:#d9d9d9;padding:0 12px;font-size:17px;text-align:left;cursor:pointer}
+.riseContentBtn span{float:right;font-size:24px;line-height:18px}
+.riseBreadcrumb{font-size:18px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 20px}
+.riseNav{display:flex;gap:18px;align-items:center;justify-content:flex-end;padding-right:24px;font-size:17px;font-weight:700}
+.riseNav button{border:0;background:transparent;font-size:46px;line-height:1;cursor:pointer;color:#111}
+.riseHeader{border-bottom:1px solid #d5d5d5;background:#fff;padding:20px 34px}
+.riseHeader h1{margin:0;font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:38px;line-height:1.18;color:#111}
+.riseFrameWrap{position:relative;flex:1;background:#fff;padding:34px}
+.riseFrameWrap iframe{width:100%;height:100%;border:0;background:#fff;box-shadow:none}
+.riseOpenNew{position:absolute;right:48px;bottom:42px;background:#fff;border:1px solid #cfcfcf;border-radius:4px;padding:9px 14px;color:#111;text-decoration:none;font-size:15px;box-shadow:0 2px 7px rgba(0,0,0,.14)}
+body.modal-open{overflow:hidden}
+@media(max-width:900px){
+  .risePanel{left:0}.riseSideRail{display:none}.riseClose{left:12px;top:12px}
+  .riseTopbar{grid-template-columns:120px 1fr}.riseNav{display:none}
+  .riseHeader{padding:70px 20px 16px}.riseHeader h1{font-size:28px}
+  .riseFrameWrap{padding:16px}
+}
+	
+.videoFrameWrap{display:flex;align-items:center;justify-content:center;background:#111;padding:32px}
+.videoFrameWrap video{width:100%;height:100%;max-height:calc(100vh - 90px);background:#000}
+.video-trigger{cursor:pointer}
+.video-trigger:hover{background:var(--blue)}	
+	
+	
+.pdf-trigger{cursor:pointer}
+.pdf-trigger:hover{background:var(--blue)}
+.pdfFrameWrap{padding:24px;background:#f4f4f4}
+.pdfFrameWrap iframe{width:100%;height:100%;border:0;background:#fff}	
+	
+	
+	/* ===== RESPONSIVE GENERAL ===== */
+@media (max-width: 1024px){
+  body{
+    min-width:0;
+  }
+
+  .layout{
+    display:block;
+    padding:20px;
+  }
+
+  .panel{
+    display:none;
+  }
+
+  .tabs{
+    overflow-x:auto;
+    white-space:nowrap;
+    padding-left:10px;
+  }
+
+  .tab{
+    flex:0 0 auto;
+    font-size:15px;
+    padding:0 14px;
+  }
+
+  .hero{
+    height:190px;
+  }
+
+  .heroText{
+    left:22px;
+    bottom:16px;
+  }
+
+  .heroText .code{
+    font-size:15px;
+  }
+
+  .heroText .name{
+    font-size:24px;
+  }
+
+  .cardHead{
+    grid-template-columns:135px 1fr 38px;
+    min-height:150px;
+    padding:20px 0 20px 20px;
+  }
+
+  .thumb{
+    width:120px;
+    height:120px;
+  }
+
+  .title{
+    font-size:20px;
+  }
+
+  .desc{
+    font-size:16px;
+  }
+
+  .row,
+  .miniHeader,
+  .simpleHeader{
+    grid-template-columns:32px 34px 1fr 32px;
+    padding:0 16px;
+  }
+
+  .rowTitle{
+    font-size:17px;
+  }
+
+  .rowSub,
+  .archiveNote,
+  .dateLine{
+    font-size:15px;
+  }
+
+  .subrow{
+    grid-template-columns:32px 34px 1fr 28px;
+    padding:0 16px 0 34px;
+  }
+
+  .subrow.selected{
+    margin:0 10px 0 24px;
+    padding:0 16px;
+  }
+
+  .avaBox{
+    margin:0 12px 8px 24px;
+    padding:14px 16px;
+    grid-template-columns:30px 38px 1fr;
+  }
+}
+
+/* ===== CELULAR ===== */
+@media (max-width: 600px){
+  html,body{
+    font-size:16px;
+  }
+
+  .topbar{
+    height:auto;
+    min-height:52px;
+    padding:10px 12px;
+  }
+
+  .topbar:before{
+    display:none;
+  }
+
+  .course-title{
+    font-size:13px;
+    white-space:normal;
+    line-height:1.25;
+  }
+
+  .status{
+    font-size:11px;
+    margin-right:0;
+    margin-left:10px;
+  }
+
+  .tabs{
+    top:52px;
+    height:48px;
+  }
+
+  .tab{
+    font-size:14px;
+    padding:0 12px;
+  }
+
+  .hero{
+    height:150px;
+  }
+
+  .heroText{
+    left:16px;
+    right:16px;
+  }
+
+  .heroText .code{
+    font-size:13px;
+  }
+
+  .heroText .name{
+    font-size:19px;
+    line-height:1.15;
+  }
+
+  .layout{
+    padding:14px;
+  }
+
+  .mainHead h1{
+    font-size:22px;
+  }
+
+  .search{
+    width:36px;
+    height:36px;
+    margin-right:0;
+  }
+
+  .card{
+    margin-bottom:18px;
+  }
+
+  .cardHead{
+    grid-template-columns:88px 1fr 30px;
+    gap:8px;
+    min-height:auto;
+    padding:14px 0 14px 14px;
+  }
+
+  .cardHead .copy{
+    padding:0 8px 0 0;
+  }
+
+  .thumb{
+    width:78px;
+    height:78px;
+  }
+
+  .title{
+    font-size:16px;
+    line-height:1.2;
+  }
+
+  .desc{
+    font-size:13px;
+    line-height:1.35;
+  }
+
+  .chev{
+    width:28px;
+    height:28px;
+  }
+
+  .row,
+  .miniHeader,
+  .simpleHeader{
+    grid-template-columns:26px 30px 1fr 24px;
+    min-height:60px;
+    padding:0 10px;
+  }
+
+  .row.tall{
+    min-height:76px;
+  }
+
+  .circle{
+    width:17px;
+    height:17px;
+  }
+
+  .iconWrap{
+    width:26px;
+    height:26px;
+  }
+
+  .iconWrap img{
+    width:24px;
+    height:24px;
+  }
+
+  .rowTitle{
+    font-size:14px;
+  }
+
+  .rowSub,
+  .archiveNote,
+  .dateLine{
+    font-size:12px;
+  }
+
+  .subrow{
+    grid-template-columns:24px 28px 1fr 20px;
+    min-height:58px;
+    padding:0 10px 0 22px;
+  }
+
+  .subrow .rowTitle{
+    font-size:13px;
+  }
+
+  .subrow.selected{
+    margin:0 8px 0 16px;
+    padding:0 10px;
+  }
+
+  .avaBox{
+    margin:0 8px 8px 16px;
+    padding:12px 10px;
+    grid-template-columns:24px 32px 1fr;
+  }
+
+  .avaBox .rowTitle{
+    font-size:13px;
+  }
+
+  .dots{
+    font-size:20px;
+  }
+
+  .help{
+    right:14px;
+    bottom:14px;
+  }
+}
+
+/* ===== POPUPS RESPONSIVE ===== */
+@media (max-width: 768px){
+  .riseSideRail{
+    width:0;
+    display:none;
+  }
+
+  .risePanel{
+    left:0;
+  }
+
+  .riseClose{
+    left:12px;
+    top:12px;
+    width:42px;
+    height:42px;
+    font-size:38px;
+    z-index:10;
+  }
+
+  .riseFrameWrap{
+    padding:65px 12px 12px;
+  }
+
+  .riseFrameWrap iframe{
+    height:100%;
+  }
+
+  .videoFrameWrap{
+    padding:65px 12px 12px;
+  }
+
+  .videoFrameWrap video{
+    width:100%;
+
+    height:auto;
+    max-height:calc(100vh - 90px);
+  }
+
+  .pdfFrameWrap{
+    padding:65px 8px 8px;
+  }
+}
+	
+</style>
+</head>
+<body>
+<header class="topbar"><div class="course-title">MASTER.0.UG.V.UAEG.1011 · CONOCIENDO LA EXPERIENCIA DEL ESTUDIANTE </div><div class="status">ABIERTO</div></header>
+<nav class="tabs"><a class="tab active">Contenido</a><a class="tab disabled">Calendario</a><a class="tab disabled">Anuncios</a><a class="tab disabled">Debates</a><a class="tab disabled">Libro de calificaciones</a><a class="tab disabled">Mensajes</a><a class="tab disabled">Grupos</a><a class="tab disabled">Logros</a></nav>
+<section class="hero"><div class="heroText"><div class="code">MASTER.0.UG.V.UAEG.1011</div><div class="name">CONOCIENDO LA EXPERIENCIA DEL ESTUDIANTE </div></div></section>
+<div class="layout">
+<main>
+<!-- ==================== INFORMACIÓN GENERAL: EDITABLE EN HTML ==================== -->
+<section class="card collapsed">
+<div class="cardHead">
+<div class="thumb contain"><img alt="Información general" src="assets/thumb-info.png"/></div>
+<div class="copy"><h2 class="title">INFORMACIÓN GENERAL DEL CURSO</h2><p class="desc">🎯 Revisa el sílabo, el video de presentación y el cronograma del curso. Accede a contenidos clave y actividades que potenciarán tu aprendizaje. 🌟 ¡Haz clic y comienza ahora!</p></div>
+<div class="chev"><svg aria-hidden="true" viewbox="0 0 20 20"><path d="M4 7.5l6 6 6-6" fill="none" stroke="#6b6b6b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></svg></div>
+</div>
+<div class="items">
+<div class="row pdf-trigger" data-pdf-url="assets/silabo.pdf" data-pdf-title="Sílabo del curso" tabindex="0" role="button">
+  <span class="circle"></span>
+  <span class="iconWrap"><img src="assets/icon-link.svg" alt="Enlace"></span>
+  <div class="rowTitle">Sílabo del curso</div>
+  <span></span>
+</div>
+<div class="row video-trigger" data-video-url="assets/video-curso.mp4" data-video-title="Video del curso" tabindex="0" role="button">
+  <span class="circle"></span>
+  <span class="iconWrap"><img src="assets/icon-video.svg" alt="Video"></span>
+  <div class="rowTitle">Video del curso</div>
+</div>
+<div class="row rise-trigger" data-rise-url="./informacion/content/index.html" data-rise-title="Información general del curso" tabindex="0" role="button">
+  <span class="circle"></span>
+  <span class="iconWrap"><img src="assets/icon-lti.svg" alt="Recurso"></span>
+  <div class="rowTitle">Información general del curso</div>
+  <span></span>
+</div>
+</div>
+</section>
+<!-- ==================== AVA: EDITABLE EN HTML ==================== -->
+<section class="card collapsed">
+<div class="cardHead">
+<div class="thumb"><img alt="AVA" src="assets/ava.png"/></div>
+<div class="copy"><h2 class="title">AVA | ASISTENTE VIRTUAL ACADÉMICO</h2><p class="desc">A lo largo de este curso encontrarás a AVA, tu asistente virtual académico. Podrás interactuar con él para resolver dudas, realizar consultas sobre tus cursos y reforzar tu aprendizaje. ¡Aprovecha sus funcionalidades y descubre cómo puede acompañarte en tu experiencia de aprendizaje!</p></div>
+
+</div>
+</section>
+<!-- ==================== TEMAS 1 AL 4: EDITABLES EN HTML ==================== -->
+<!-- ==================== TEMA 1: EDITABLE EN HTML ==================== -->
+<section class="card topicCard collapsed">
+<div class="cardHead">
+<div class="thumb contain"><img alt="Tema 1" src="assets/tema-01.png"/></div>
+<div class="copy">
+<h2 class="title">TEMA 1: Fundamentos de la ciudadanía en el contexto socioambiental</h2>
+<p class="desc">📚 ¡Explora tu curso! 🚀 Revisa los materiales de la unidad, conoce tus desafíos de aprendizaje, accede a recursos clave y revisa las actividades que potenciarán tu aprendizaje. ¡Haz clic aquí! 💡✨</p>
+</div>
+<div aria-label="Expandir o contraer" class="chev"><svg aria-hidden="true" viewbox="0 0 20 20"><path d="M4 7.5l6 6 6-6" fill="none" stroke="#6b6b6b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></svg></div>
+</div>
+<div class="items">
+<div class="row rise-trigger" data-rise-url="./comencemos/content/index.html" data-rise-title="Focaliza: Conéctate con el propósito de lo que vas a aprender" tabindex="0" role="button">
+  <span class="circle"></span>
+  <span class="iconWrap"><img src="assets/icon-doc.svg" alt="Documento"></span>
+  <div class="rowTitle">💡 Focaliza: Conéctate con el propósito de lo que vas a aprender.</div>
+  <span></span>
+</div>
+<div class="row toggle">
+<span class="circle"></span>
+<span class="iconWrap"><img alt="Carpeta" src="assets/icon-folder.svg"/></span>
+<div class="rowTitle">👆🏻 Linkea: Explora y conecta con los contenidos clave.</div>
+<span class="itemChev"><svg aria-hidden="true" viewbox="0 0 20 20"><path d="M4 7.5l6 6 6-6" fill="none" stroke="#6b6b6b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></svg></span>
+</div>
+<div class="nested">
+<div class="subrow rise-trigger" data-rise-title="1.Entendiendo al estudiante CAD" data-rise-url="./1/content/index.html" role="button" tabindex="0">
+<span class="circle"></span>
+<span class="iconWrap"><img alt="Subtema" src="assets/icon-scorm.svg"/></span>
+<div class="rowTitle"><a>1.Entendiendo al estudiante CAD</a></div>
+<span></span>
+</div>
+<div class="subrow rise-trigger" data-rise-title="2. Conociendo un curso de carrera a distancia" data-rise-url="./2/content/index.html" role="button" tabindex="0">
+<span class="circle"></span>
+<span class="iconWrap"><img alt="Subtema" src="assets/icon-scorm.svg"/></span>
+<div class="rowTitle">2. Conociendo un curso de carrera a distancia</div>
+<span></span>
+</div>
+<div class="subrow rise-trigger" data-rise-title="3. Plataformas y acompañamiento del estudiante" data-rise-url="./3/content/index.html" role="button" tabindex="0">
+<span class="circle"></span>
+<span class="iconWrap"><img alt="Subtema" src="assets/icon-scorm.svg"/></span>
+<div class="rowTitle">3. Plataformas y acompañamiento del estudiante</div>
+<span></span>
+</div>
+<div class="subrow rise-trigger" data-rise-title="4. Beneficios y diferenciadores" data-rise-url="./4/content/index.html" role="button" tabindex="0">
+<span class="circle"></span>
+<span class="iconWrap"><img alt="Subtema" src="assets/icon-scorm.svg"/></span>
+<div class="rowTitle">4. Beneficios y diferenciadores</div>
+<span></span>
+</div>
+</div>
+<div class="row toggle">
+<span class="circle"></span>
+<span class="iconWrap"><img alt="Carpeta" src="assets/carpeta.svg"/></span>
+<div class="rowTitle">🎯 Experimenta: Lleva el conocimiento a la acción.</div>
+<span class="itemChev"><svg aria-hidden="true" viewbox="0 0 20 20"><path d="M4 7.5l6 6 6-6" fill="none" stroke="#6b6b6b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></svg></span>
+</div>
+<div class="nested">
+<div class="avaBox rise-trigger" data-rise-url="./ava/content/index.html" data-rise-title="Conoce a AVA, tu asistente virtual" tabindex="0" role="button">
+  <span class="circle"></span>
+  <span class="iconWrap"><img src="assets/ava2.png" alt="AVA"></span>
+  <div>
+    <div class="rowTitle">Conoce a AVA, tu asistente virtual</div>
+    <div class="rowSub">Realiza todas tus consultas sobre el contenido del curso y/o practica todo lo aprendido con cuestionarios, preguntas abiertas y dinámicas de role play.</div>
+  </div>
+</div>
+</div>
+<div class="row rise-trigger" 
+     data-rise-url="./expande/content/index.html"
+     data-rise-title="Expande tu conocimiento"
+     tabindex="0"
+     role="button">
+  <span class="circle"></span>
+  <span class="iconWrap"><img src="assets/icon-scorm.svg" alt="Actividad"></span>
+  <div class="rowTitle">🎉 Expande tu conocimiento</div>
+  <span></span>
+</div>
+</div>
+</section>
+</main>
+<aside class="panel">
+<div class="panelBlock"><h2>Profesores del curso</h2><div class="empty">No hay profesores en el curso</div></div>
+<div class="panelBlock"><h2>Detalles y acciones</h2>
+<div class="action"><span class="aico">♟</span><div><b>Lista</b><a>Ver a los participantes de su curso</a></div></div>
+<div class="action"><span class="aico">▣</span><div><b>Asistencia</b><a>Ver su asistencia</a></div></div>
+<div class="action"><span class="aico">▦</span><div><b>Libros y herramientas</b><a>Ver herramientas del curso y de la institución</a></div></div>
+</div>
+</aside>
+</div>
+
+<div aria-hidden="true" class="riseModal" id="riseModal">
+<div class="riseSideRail">
+<button aria-label="Cerrar" class="riseClose" type="button">×</button>
+</div>
+<div aria-labelledby="riseTitle" aria-modal="true" class="risePanel" role="dialog">
+<div class="riseHeader">
+<h1 id="riseTitle">Sub-tema</h1>
+</div>
+<div class="riseFrameWrap">
+<iframe allowfullscreen="" id="riseFrame" loading="lazy" src="" title="Contenido Rise"></iframe>
+<a class="riseOpenNew" href="https://share.articulate.com/EkQZNQM0yI5Yv9WDrOe_R" id="riseOpenNew" rel="noopener" target="_blank">Abrir en una nueva pestaña</a>
+</div>
+</div>
+</div>
+<div class="help">?</div>
+	
+	
+<div id="videoModal" class="riseModal" aria-hidden="true">
+  <div class="riseSideRail">
+    <button class="videoClose riseClose" type="button" aria-label="Cerrar">×</button>
+  </div>
+
+  <div class="risePanel" role="dialog" aria-modal="true" aria-labelledby="videoTitle">
+    <div class="riseFrameWrap videoFrameWrap">
+      <video id="courseVideo" controls controlsList="nodownload" preload="metadata">
+        <source id="courseVideoSource" src="" type="video/mp4">
+        Tu navegador no puede reproducir este video.
+      </video>
+    </div>
+  </div>
+</div>	
+	
+	
+	
+<div id="pdfModal" class="riseModal" aria-hidden="true">
+  <div class="riseSideRail">
+    <button class="pdfClose riseClose" type="button" aria-label="Cerrar">×</button>
+  </div>
+
+  <div class="risePanel" role="dialog" aria-modal="true">
+    <div class="riseFrameWrap pdfFrameWrap">
+      <iframe id="pdfFrame" title="Sílabo del curso" src=""></iframe>
+    </div>
+  </div>
+</div>	
+	
+<script>
+/* JavaScript mínimo solo para abrir/cerrar desplegables.
+   Todo el contenido de temas, subtemas, T1, T2 y EF está escrito arriba en HTML editable. */
+document.querySelectorAll('.card > .cardHead .chev, .card > .miniHeader .chev').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    btn.closest('.card').classList.toggle('collapsed');
+  });
+});
+
+document.querySelectorAll('.toggle').forEach(function(row) {
+  row.addEventListener('click', function() {
+    row.classList.toggle('open');
+    const next = row.nextElementSibling;
+    if (next && next.classList.contains('nested')) {
+      next.style.display = row.classList.contains('open') ? 'block' : 'none';
+    }
+  });
+});
+
+
+// Popup para subtemas: abre el contenido Rise en un iframe.
+(function(){
+  const modal = document.getElementById('riseModal');
+  const frame = document.getElementById('riseFrame');
+  const title = document.getElementById('riseTitle');
+  const openNew = document.getElementById('riseOpenNew');
+  const closeBtn = modal ? modal.querySelector('.riseClose') : null;
+
+  function openRise(row){
+    const url = row.dataset.riseUrl || 'https://share.articulate.com/EkQZNQM0yI5Yv9WDrOe_R';
+    const rowTitle = row.dataset.riseTitle || row.innerText.trim() || 'Contenido';
+    title.textContent = rowTitle;
+    frame.src = url;
+    openNew.href = url;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeRise(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+    frame.src = '';
+  }
+
+  document.querySelectorAll('.rise-trigger').forEach(function(row){
+    row.addEventListener('click', function(e){
+      e.preventDefault();
+      openRise(row);
+    });
+    row.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openRise(row);
+      }
+    });
+  });
+
+  if(closeBtn) closeBtn.addEventListener('click', closeRise);
+  if(modal){
+    modal.addEventListener('click', function(e){
+      if(e.target === modal) closeRise();
+    });
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal && modal.classList.contains('open')) closeRise();
+  });
+})();
+	
+	// Popup para Video del curso: abre un MP4 dentro del modal.
+(function(){
+  const modal = document.getElementById('videoModal');
+  const video = document.getElementById('courseVideo');
+  const source = document.getElementById('courseVideoSource');
+  const closeBtn = modal ? modal.querySelector('.videoClose') : null;
+
+  function openVideo(row){
+    const url = row.dataset.videoUrl || '';
+    source.src = url;
+    video.load();
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeVideo(){
+    video.pause();
+    source.src = '';
+    video.load();
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+  }
+
+  document.querySelectorAll('.video-trigger').forEach(function(row){
+    row.addEventListener('click', function(e){
+      e.preventDefault();
+      openVideo(row);
+    });
+
+    row.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openVideo(row);
+      }
+    });
+  });
+
+  if(closeBtn) closeBtn.addEventListener('click', closeVideo);
+
+  if(modal){
+    modal.addEventListener('click', function(e){
+      if(e.target === modal) closeVideo();
+    });
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal && modal.classList.contains('open')){
+      closeVideo();
+    }
+  });
+})();
+	
+// Popup para PDF: abre el sílabo dentro del modal.
+(function(){
+  const modal = document.getElementById('pdfModal');
+  const frame = document.getElementById('pdfFrame');
+  const closeBtn = modal ? modal.querySelector('.pdfClose') : null;
+
+  function openPdf(row){
+    const url = row.dataset.pdfUrl || '';
+    frame.src = url;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+  }
+
+  function closePdf(){
+    frame.src = '';
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+  }
+
+  document.querySelectorAll('.pdf-trigger').forEach(function(row){
+    row.addEventListener('click', function(e){
+      e.preventDefault();
+      openPdf(row);
+    });
+
+    row.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openPdf(row);
+      }
+    });
+  });
+
+  if(closeBtn) closeBtn.addEventListener('click', closePdf);
+
+  if(modal){
+    modal.addEventListener('click', function(e){
+      if(e.target === modal) closePdf();
+    });
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal && modal.classList.contains('open')){
+      closePdf();
+    }
+  });
+})();	
+	
+</script>
+</body>
+</html>
